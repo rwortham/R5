@@ -1,0 +1,152 @@
+# KEYWORD1 Classes, datatypes, and C++ keywords
+# KEYWORD2 Methods and functions
+# LITERAL1 Constants
+
+###########################
+# R5CornerSensors Library #
+###########################
+
+R5_FRONT_RIGHT	LITERAL1
+R5_FRONT_LEFT	LITERAL1
+R5_REAR_LEFT	LITERAL1
+R5_REAR_RIGHT	LITERAL1
+R5_FRONT	LITERAL1
+R5_LEFT	LITERAL1
+R5_REAR	LITERAL1
+R5_RIGHT	LITERAL1
+R5_NONE	LITERAL1
+
+R5CornerSensors	KEYWORD1
+passiveLevel	KEYWORD2	
+activeLevel	KEYWORD2
+bleedLevel	KEYWORD2
+calibrateBleed	KEYWORD2
+getRange	KEYWORD2
+getEdgeRange	KEYWORD2
+sense	KEYWORD2
+setPause	KEYWORD2
+getPause	KEYWORD2
+somethingNear	KEYWORD2
+edgeNear	KEYWORD2
+getCornerDistance	KEYWORD2
+getSideCornerDistance	KEYWORD2
+getEdgeDistance	KEYWORD2
+getEdgeAngle	KEYWORD2
+nearestCorner	KEYWORD2
+nearestEdge	KEYWORD2
+
+###########################
+# R5MotorControl Library  #
+###########################
+
+R5_FAIL	LITERAL1
+R5_SUCCESS	LITERAL1
+R5_IN_PROGRESS	LITERAL1
+R5_ERROR	LITERAL1
+R5_NORMAL	LITERAL1
+R5_STOPPED	LITERAL1
+R5_ROTATE	LITERAL1
+R5_DRIVE	LITERAL1
+R5_REVERSE	LITERAL1
+R5_CNTPER1000MM	LITERAL1
+R5_CNTPER100DEG	LITERAL1
+
+R5MotorControl	KEYWORD1
+setSpeed	KEYWORD2
+setRudder	KEYWORD2
+getParalyse	KEYWORD2
+getReverse	KEYWORD2
+resetDistanceTravelled	KEYWORD2
+getSpeed	KEYWORD2
+getRudder	KEYWORD2
+getMotorCurrent	KEYWORD2
+getDistanceTravelled	KEYWORD2
+getBehaviourState	KEYWORD2
+stop	KEYWORD2
+stopAndRotate	KEYWORD2
+move	KEYWORD2
+stopTurnLeft	KEYWORD2
+stopTurnRight	KEYWORD2
+stopTurnAround	KEYWORD2
+driveForward	KEYWORD2
+driveBackward	KEYWORD2
+driveMotors	KEYWORD2
+
+###########################
+# R5HeadControl Library   #
+###########################
+
+R5HeadControl	KEYWORD1
+setHScanParams	KEYWORD2
+setHScanInterval	KEYWORD2
+setVScanParams	KEYWORD2
+setVScanInterval	KEYWORD2
+setParalyse	KEYWORD2
+getHScanInterval	KEYWORD2
+getVScanInterval	KEYWORD2
+getParalyse	KEYWORD2
+lookAhead	KEYWORD2
+lookNearestSide	KEYWORD2
+driveHead	KEYWORD2
+
+###########################
+# R5SensingHead Library   #
+###########################
+
+R5_HEAD_MAXRANGE	LITERAL1
+R5_HEAD_MINRANGE	LITERAL1
+R5_ROBOT_WIDTH	LITERAL1
+
+R5SensingHead	KEYWORD1
+getLeftEndStopRange	KEYWORD2
+getRightEndStopRange	KEYWORD2
+getTopEndStopRange	KEYWORD2
+getBottomEndStopRange	KEYWORD2
+getHCells	KEYWORD2
+getVCells	KEYWORD2
+getRangeAtCell	KEYWORD2
+getHMostOpenAngle	KEYWORD2
+senseMatrixReady	KEYWORD2
+getMinRange	KEYWORD2
+senseHMatrixReady	KEYWORD2
+getHMinRange	KEYWORD2
+senseVMatrixReady	KEYWORD2
+getVMinRange	KEYWORD2
+clearSenseMatrix	KEYWORD2
+
+###########################
+# R5Ultrasonic Library    #
+###########################
+
+R5Ultrasonic	KEYWORD1
+measureRange	KEYWORD2
+range	KEYWORD2
+
+###########################
+# R5PIR Library           #
+###########################
+
+R5PIR	KEYWORD1
+activated	KEYWORD2
+
+###########################
+# R5EEPROM Library        #
+###########################
+
+R5_WIFI_SSID	LITERAL1
+R5_WIFI_PW	LITERAL1
+R5_SERVER_IP	LITERAL1
+
+R5ServerParams	KEYWORD1
+EEPROMStorage	KEYWORD1
+R5EEPROM	KEYWORD1
+getGlobalFlags	KEYWORD2
+getPlanRate	KEYWORD2
+getServerParams	KEYWORD2
+setGlobalFlags	KEYWORD2
+setPlanRate	KEYWORD2
+setServerParams	KEYWORD2
+readPlan	KEYWORD2
+writePlan	KEYWORD2
+
+
