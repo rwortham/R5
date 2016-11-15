@@ -18,12 +18,30 @@
 #ifndef _R5_H_
 #define __R5_H_
 
+#include "R5Output.h"
 #include "R5CornerSensors.h"
 #include "R5MotorControl.h"
 #include "R5HeadControl.h"
 #include "R5Ultrasonic.h"
 #include "R5SensingHead.h"
 #include "R5PIR.h"
+#include "R5Voice.h"
+#include "R5Vocalise.h"
 #include "R5EEPROM.h"
+
+// implementation of MyMonitor is in Robot_Instinct but definitions are here
+// because Arduino sketches have no concept of include files
+
+class MyMonitor : public R5ExecStackMonitor {
+public:
+  MyMonitor(Instinct::Names *pNames, R5Voice *pVocaliser, R5Output *pOut) : R5ExecStackMonitor(pNames, pVocaliser, pOut) {};
+  unsigned char nodeExecuted(const Instinct::PlanNode * pPlanNode);
+  unsigned char nodeSuccess(const Instinct::PlanNode * pPlanNode);
+  unsigned char nodeInProgress(const Instinct::PlanNode * pPlanNode);
+  unsigned char nodeFail(const Instinct::PlanNode * pPlanNode);
+  unsigned char nodeError(const Instinct::PlanNode * pPlanNode);
+  unsigned char nodeSense(const Instinct::ReleaserType *pReleaser, const int nSenseValue);
+};
+
 
 #endif // __R5_H_

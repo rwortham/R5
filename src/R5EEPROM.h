@@ -36,28 +36,33 @@ typedef struct {
     unsigned int uiServerPort;
 	unsigned char bWifiRetry = 2;
 	unsigned char bServerRetry = 3;
-} R5ServerParams;
+} R5ServerParamsType;
 
 typedef struct {
-	R5ServerParams sServerParams;
-    unsigned char bGlobalFlags;
+	R5ServerParamsType sServerParams;
+    unsigned int uiGlobalFlags;
+    R5SpeakRulesType speakRules[INSTINCT_NODE_TYPES][INSTINCT_RUNTIME_NOT_RELEASED];
     unsigned int uiPlanRate;
+    unsigned int uiDataLen; // the length of binary data stored in EEPROM
     int nPlanID;
     Instinct::instinctID bPlanElements[INSTINCT_NODE_TYPES]; // number of plan elements
     char bPlan; // the first byte of the byte stream that is the plan
-} EEPROMStorage;
+    char bData; // after all the plan bytes, we can store binary data in this structure
+} EEPROMStorageType;
 
 class R5EEPROM {
 public:
 
-	unsigned char getGlobalFlags(void);
+	unsigned int  getGlobalFlags(void);
 	unsigned int  getPlanRate(void);
-	unsigned char getServerParams(R5ServerParams *pServerParams);
-	unsigned char setGlobalFlags(const unsigned char cFlags);
+	unsigned char getServerParams(R5ServerParamsType *pServerParams);
+	unsigned char getSpeakRules(R5SpeakRulesType *pSpeakRules);
+	unsigned int  setGlobalFlags(const unsigned int uiFlags);
 	unsigned char setPlanRate(const unsigned int uiPlanRate);
-	unsigned char setServerParams(R5ServerParams *pServerParams);
-	unsigned char readPlan(Instinct::CmdPlanner *pPlan);
-	unsigned char writePlan(Instinct::CmdPlanner *pPlan);
+	unsigned char setServerParams(R5ServerParamsType *pServerParams);
+	unsigned char setSpeakRules(R5SpeakRulesType *pSpeakRules);
+	unsigned char readData(Instinct::CmdPlanner *pPlan, const unsigned int uiBuffLen, unsigned char *pData);
+	unsigned char writeData(Instinct::CmdPlanner *pPlan, const unsigned int uiDataLen, unsigned char *pData);
 
 private:
 	unsigned int getStringAtOffset(char *pBuff, const unsigned int nBuffLen, const unsigned int nOffset);

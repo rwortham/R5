@@ -16,7 +16,7 @@
 //  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 //
 // The EEPROM is used to store robot configuration across power cycles
-// It stores the following in the EEPROMStorage struct within the EEPROM.
+// It stores the following in the EEPROMStorageType struct within the EEPROM.
 // - The WiFi SSID and password
 // - Instinct-Server IP address and port number
 // - A byte containing global flags that control robot operation
@@ -25,46 +25,66 @@
 #include "Arduino.h"
 #include "EEPROM.h"
 #include "Instinct.h"
+#include "R5Output.h"
+#include "R5Voice.h"
+#include "R5Vocalise.h"
 #include "R5EEPROM.h"
 
 extern EEPROMClass EEPROM;
 
-unsigned char R5EEPROM::getServerParams(R5ServerParams *pServerParams)
+unsigned char R5EEPROM::getServerParams(R5ServerParamsType *pServerParams)
 {
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 	int nAddr = (int)&pEEPROM->sServerParams;
 
-	return (getBytesAtOffset((unsigned char *)pServerParams, sizeof(R5ServerParams), nAddr) ? 1 : 0);
+	return (getBytesAtOffset((unsigned char *)pServerParams, sizeof(R5ServerParamsType), nAddr) ? 1 : 0);
 }
 
-unsigned char R5EEPROM::setServerParams(R5ServerParams *pServerParams)
+unsigned char R5EEPROM::setServerParams(R5ServerParamsType *pServerParams)
 {
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 	int nAddr = (int)&pEEPROM->sServerParams;
 
-	return (setBytesAtOffset((unsigned char *)pServerParams, sizeof(R5ServerParams), nAddr) ? 1 : 0);
+	return (setBytesAtOffset((unsigned char *)pServerParams, sizeof(R5ServerParamsType), nAddr) ? 1 : 0);
 }
 
-unsigned char R5EEPROM::getGlobalFlags(void)
+unsigned char R5EEPROM::getSpeakRules(R5SpeakRulesType *pSpeakRules)
 {
-	EEPROMStorage *pEEPROM = 0;
-	int nAddr = (int)&pEEPROM->bGlobalFlags;
+	EEPROMStorageType *pEEPROM = 0;
+	int nAddr = (int)&pEEPROM->speakRules;
 
-	return EEPROM.read(nAddr);
+	return (getBytesAtOffset((unsigned char *)pSpeakRules,
+			sizeof(R5SpeakRulesType)*INSTINCT_NODE_TYPES*INSTINCT_RUNTIME_NOT_RELEASED, nAddr) ? 1 : 0);
 }
 
-unsigned char R5EEPROM::setGlobalFlags(const unsigned char cFlags)
+unsigned char R5EEPROM::setSpeakRules(R5SpeakRulesType *pSpeakRules)
 {
-	EEPROMStorage *pEEPROM = 0;
-	int nAddr = (int)&pEEPROM->bGlobalFlags;
+	EEPROMStorageType *pEEPROM = 0;
+	int nAddr = (int)&pEEPROM->speakRules;
 
-	EEPROM.write(nAddr, cFlags);
-	return true;
+	return (setBytesAtOffset((unsigned char *)pSpeakRules,
+			sizeof(R5SpeakRulesType)*INSTINCT_NODE_TYPES*INSTINCT_RUNTIME_NOT_RELEASED, nAddr) ? 1 : 0);
+}
+
+unsigned int R5EEPROM::getGlobalFlags(void)
+{
+	EEPROMStorageType *pEEPROM = 0;
+	int nAddr = (int)&pEEPROM->uiGlobalFlags;
+
+	return getIntAtOffset(nAddr);
+}
+
+unsigned int R5EEPROM::setGlobalFlags(const unsigned int uiFlags)
+{
+	EEPROMStorageType *pEEPROM = 0;
+	int nAddr = (int)&pEEPROM->uiGlobalFlags;
+
+	return setIntAtOffset(uiFlags, nAddr);
 }
 
 unsigned int R5EEPROM::getPlanRate(void)
 {
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 	int nAddr = (int)&pEEPROM->uiPlanRate;
 
 	return getIntAtOffset(nAddr);
@@ -72,7 +92,7 @@ unsigned int R5EEPROM::getPlanRate(void)
 
 unsigned char R5EEPROM::setPlanRate(const unsigned int uiPlanRate)
 {
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 	int nAddr = (int)&pEEPROM->uiPlanRate;
 
 	return setIntAtOffset(uiPlanRate, nAddr);
@@ -170,27 +190,24 @@ unsigned char R5EEPROM::setIntAtOffset(const int nValue, const unsigned int nOff
 }
 
 // read the plan back into RAM from EEPROM
-unsigned char R5EEPROM::readPlan(Instinct::CmdPlanner *pPlan)
+unsigned char R5EEPROM::readData(Instinct::CmdPlanner *pPlan, const unsigned int uiBuffLen, unsigned char *pData)
 {
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 	Instinct::PlanNode sPlanNode;
 	Instinct::instinctID bPlanElements[INSTINCT_NODE_TYPES];
 	Instinct::instinctID bElemCount = 0;
 
 	// first we read the number of Node structures we are going to read
-	int nAddr = (int)pEEPROM->bPlanElements;
-	getBytesAtOffset((unsigned char *)bPlanElements, sizeof(bPlanElements), nAddr);
+	getBytesAtOffset((unsigned char *)bPlanElements, sizeof(bPlanElements), (int)pEEPROM->bPlanElements);
 
 	for (int i = 0; i < INSTINCT_NODE_TYPES; i++)
 		bElemCount += bPlanElements[i];
 
-	if (!bElemCount) // check there is something to read
-		return false;
-
 	if ( !pPlan->initialisePlan(bPlanElements) )
 		return false;
 
-	nAddr = (int)&pEEPROM->bPlan;
+	pPlan->setPlanID(getIntAtOffset((int)&pEEPROM->nPlanID));
+	int nAddr = (int)&pEEPROM->bPlan;
 
 	// read each element from the EPROM into a buffer and then write it to the plan
 	for ( Instinct::instinctID i = 0; i < bElemCount; i++)
@@ -205,14 +222,18 @@ unsigned char R5EEPROM::readPlan(Instinct::CmdPlanner *pPlan)
 		nAddr += nSize;
 	}
 
-	nAddr = (int)&pEEPROM->nPlanID;
-	pPlan->setPlanID(getIntAtOffset(nAddr));
-
+	// copy the binary data from EEPROM to the buffer
+	unsigned int uiDataLen = getIntAtOffset((int)&pEEPROM->uiDataLen);
+	unsigned int uiLen = min(uiDataLen, uiBuffLen);
+	if (pData && uiLen)
+	{
+		getBytesAtOffset(pData, uiLen, nAddr);
+	}
 	return true;
 }
 
 // write the plan to the EEPROM
-unsigned char R5EEPROM::writePlan(Instinct::CmdPlanner *pPlan)
+unsigned char R5EEPROM::writeData(Instinct::CmdPlanner *pPlan, const unsigned int uiDataLen, unsigned char *pData)
 {
 	Instinct::PlanNode sPlanNode;
 	Instinct::instinctID bPlanElements[INSTINCT_NODE_TYPES];
@@ -220,20 +241,20 @@ unsigned char R5EEPROM::writePlan(Instinct::CmdPlanner *pPlan)
 	unsigned int nPlanMemoryUsage = pPlan->planUsage(NULL); // total space used in RAM
 
 	// calculate how much EEPROM we will use and return false if not enough
-	unsigned int nEEPROMUsage = nPlanMemoryUsage + (bElemCount * sizeof(sPlanNode.bNodeType));
-	if (EEPROM.length() < (nEEPROMUsage + sizeof(EEPROMStorage)))
+	unsigned int nEEPROMUsage = nPlanMemoryUsage + (bElemCount * sizeof(sPlanNode.bNodeType)) + uiDataLen;
+	if (EEPROM.length() < (nEEPROMUsage + sizeof(EEPROMStorageType)))
 		return false;
 
 	Instinct::instinctID bMaxElementID = pPlan->maxElementID();
-	EEPROMStorage *pEEPROM = 0;
+	EEPROMStorageType *pEEPROM = 0;
 
 	// first we store the number of Node structures we are going to write out
-	int nAddr = (int)&pEEPROM->bPlanElements;
-
 	pPlan->planSize(bPlanElements); // get the array of element counts from the plan
-	setBytesAtOffset(bPlanElements, sizeof(bPlanElements), nAddr);
+	setBytesAtOffset(bPlanElements, sizeof(bPlanElements), (int)&pEEPROM->bPlanElements);
 
-	nAddr = (int)&pEEPROM->bPlan;
+	setIntAtOffset(pPlan->getPlanID(), (int)&pEEPROM->nPlanID);
+
+	int nAddr = (int)&pEEPROM->bPlan;
 
 	// read each element from the plan into a buffer and then write it to EEPROM
 	for ( Instinct::instinctID i = 0; i < bMaxElementID; i++)
@@ -248,8 +269,12 @@ unsigned char R5EEPROM::writePlan(Instinct::CmdPlanner *pPlan)
 		}
 	}
 
-	nAddr = (int)&pEEPROM->nPlanID;
-	setIntAtOffset(pPlan->getPlanID(), nAddr);
+	if (pData && uiDataLen)
+	{
+		// store the binary data at the end
+		setBytesAtOffset(pData, uiDataLen, nAddr);
+		setIntAtOffset(uiDataLen, (int)&pEEPROM->uiDataLen);
+	}
 
 	return true;
 }

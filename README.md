@@ -14,6 +14,7 @@ Version
 ------
 1.0.1 - First public upload
 
+1.1.0 - Added support for Voice output and Vocalisation of plan execution. Includes various fixes, new commands and config options. Requires the latest Instinct Planner and Instinct-Server.
 
 License
 ----
