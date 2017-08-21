@@ -18,6 +18,9 @@
 #ifndef _R5VOCALISE_H_
 #define __R5VOCALISE_H_
 
+//#define R5_BUDDY 1 // define this to make the robot say Buddy instead of R5
+
+
 #define R5_EXEC_STACK_DEPTH 20
 
 // structure to hold parameters for how to speak

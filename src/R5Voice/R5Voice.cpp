@@ -88,7 +88,7 @@ void R5Voice::processVoice(void)
 		while (pSerial->read() != -1); // clear any additional chars in receive buffer
 		pSerial->print('S');
 		pSerial->println(szVoiceBuffer);
-		strcpy(szLastVoiceBuffer, szVoiceBuffer);
+		strncpy(szLastVoiceBuffer, szVoiceBuffer, sizeof(szLastVoiceBuffer));
 		ulRepeatMilliSecs = ulMilliSecs;
 	}
 	// either we've timed out, or we've spoken
@@ -127,6 +127,7 @@ unsigned char R5Voice::speak(const char *pWords, unsigned int uiTimeout, unsigne
 	}
 
 	strncpy(szVoiceBuffer, pWords, sizeof(szVoiceBuffer));
+	szVoiceBuffer[sizeof(szVoiceBuffer)-1] = 0; // make sure its always zero terminated
 	uiVoiceTimeout = uiTimeout;
 	uiRepeatTimeout = uiRptTimeout;
 	ulStartMilliSecs = millis();

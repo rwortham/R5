@@ -18,6 +18,8 @@
 #ifndef _R5VOICE_H_
 #define _R5VOICE_H_
 
+#define R5_VOICE_MAX_SENTENCE 100
+
 class R5Voice {
 public:
 	R5Voice(Stream *pStream);
@@ -26,8 +28,8 @@ public:
 	unsigned char speak(const char *pWords, unsigned int uiTimeout, unsigned char bRepeatMyself, unsigned int uiRptTimeout, unsigned char bAlwaysSpeak);
 
 private:
-	char szVoiceBuffer[80]; // what I'm going to say next
-	char szLastVoiceBuffer[80]; // what I last said
+	char szVoiceBuffer[R5_VOICE_MAX_SENTENCE]; // what I'm going to say next
+	char szLastVoiceBuffer[R5_VOICE_MAX_SENTENCE]; // what I last said
 	unsigned int uiVoiceTimeout; // the max time to wait to say what's in the VoiceBuffer
 	unsigned int uiRepeatTimeout; // the max time to remember what we last said
 	unsigned long ulStartMilliSecs;

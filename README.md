@@ -16,11 +16,13 @@ Version
 
 1.1.0 - Added support for Voice output and Vocalisation of plan execution. Includes various fixes, new commands and config options. Requires the latest Instinct Planner and Instinct-Server.
 
+1.1.1 - Added conditional compilation to voice output for R5/Buddy the Robot.
+
 License
 ----
 The R5 Robot library is Open Source Software distributed under the GNU GPL licence.
 
-Copyright (c) 2015 Robert H. Wortham
+Copyright (c) 2015-17 Robert H. Wortham
 
    [Instinct Planner]: <http://www.robwortham.com/instinct-planner/>
    [R5 Robot]: <http://www.robwortham.com/r5-robot/>

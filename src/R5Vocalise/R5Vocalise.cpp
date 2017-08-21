@@ -227,7 +227,11 @@ void R5ExecStackMonitor::vocalise(const R5ExecStackElementType *pExecStackElemen
 			{
 				case INSTINCT_DRIVE:
 				{
+#ifdef R5_BUDDY
+					static const char PROGMEM szFmt[] = {"Buddy is trying to "};
+#else
 					static const char PROGMEM szFmt[] = {"R5 is trying to "};
+#endif
 					snprintf_P(pBuff, nBuffLen, szFmt);
 					// static const char PROGMEM szFmt2[] = {""};
 					// snprintf_P(szEndBuff, sizeof(szEndBuff), szFmt2);
@@ -264,7 +268,11 @@ void R5ExecStackMonitor::vocalise(const R5ExecStackElementType *pExecStackElemen
 		case INSTINCT_RUNTIME_FAILED:
 		{
 			// say failed
+#ifdef R5_BUDDY
+			static const char PROGMEM szFmt[] = {"Buddy tried "};
+#else
 			static const char PROGMEM szFmt[] = {"R5 tried "};
+#endif
 			snprintf_P(pBuff, nBuffLen, szFmt);
 			static const char PROGMEM szFmt2[] = {" and failed."};
 			snprintf_P(szEndBuff, sizeof(szEndBuff), szFmt2);
@@ -287,7 +295,11 @@ void R5ExecStackMonitor::vocalise(const R5ExecStackElementType *pExecStackElemen
 			{
 				case INSTINCT_DRIVE:
 				{
+#ifdef R5_BUDDY
+					static const char PROGMEM szFmt[] = {"Buddy has finished "};
+#else
 					static const char PROGMEM szFmt[] = {"R5 has finished "};
+#endif
 					snprintf_P(pBuff, nBuffLen, szFmt);
 					// static const char PROGMEM szFmt2[] = {" successfully."};
 					// snprintf_P(szEndBuff, sizeof(szEndBuff), szFmt2);
