@@ -18,11 +18,13 @@ Version
 
 1.1.1 - Added conditional compilation to voice output for R5/Buddy the Robot.
 
+1.2.0 - Added the Arduino sketch files
+
 License
 ----
 The R5 Robot library is Open Source Software distributed under the GNU GPL licence.
 
-Copyright (c) 2015-17 Robert H. Wortham
+Copyright (c) 2015-19 Robert H. Wortham
 
    [Instinct Planner]: <http://www.robwortham.com/instinct-planner/>
    [R5 Robot]: <http://www.robwortham.com/r5-robot/>
